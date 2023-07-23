@@ -3,30 +3,29 @@ import express from "express"
 import url from "url"
 import path from "path"
 import { Server } from "socket.io"
-import http from 'http'
-const io = new Server(http)
+import http from "http"
 
 const app = express()
-const port = process.env.PORT || 3000
+const PORT = process.env.PORT || 3000
+
+// Servidor http
+const httpServer = http.createServer(app)
+const io = new Server(httpServer);
 
 //Obtém o caminho para o arquivo atual, nesse caso server.js
 const actualPath = url.fileURLToPath(import.meta.url)
 
 // A partir do diretório atual, podemos obter o caminho para o diretório publico
-const publicPath = path.join(actualPath, "../../", "public")
+const publicPath = path.join(actualPath, "../../", "public/")
 
 // Acesso ao index do html
 app.use(express.static(publicPath))
 
-const httpServer = http.createServer(app)
-
-httpServer.listen(port, () => {
-    console.log(`Server is running at ${port}`)
+// Listen Servidor http
+httpServer.listen(PORT, () => {
+    console.log(`Server is running at ${PORT}`)
 })
 
-io.on('connection', () => console.log("oi"))
-
-
-
-
-
+io.on("connection", () => {
+    console.log("Customer is connected");
+});
