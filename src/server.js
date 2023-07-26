@@ -21,11 +21,14 @@ const publicPath = path.join(actualPath, "../../", "public/")
 // Acesso ao index do html
 app.use(express.static(publicPath))
 
+// Captura se alguém se conectou a pagina html
+io.on("connection", (socket) => {
+    console.log(`A user is connected ${socket.id}`);
+});
+
 // Listen Servidor http
 httpServer.listen(PORT, () => {
     console.log(`Server is running at ${PORT}`)
 })
 
-io.on("connection", () => {
-    console.log("Customer is connected");
-});
+
